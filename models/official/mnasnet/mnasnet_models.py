@@ -128,18 +128,18 @@ def mnasnet_b1(depth_multiplier=None, output_stride=32, squeeze=False):
   
   if squeeze:
     if output_stride == 16:
-      block_args.append('r4_k5_s11_e6_i96_o96')
-      block_args.append('r1_k3_s11_e6_i96_o160_noskip')
+      blocks_args.append('r4_k5_s11_e6_i96_o96')
+      blocks_args.append('r1_k3_s11_e6_i96_o160_noskip')
     else:
-      block_args.append('r4_k5_s22_e6_i96_o96')
-      block_args.append('r1_k3_s11_e6_i96_o160_noskip')
+      blocks_args.append('r4_k5_s22_e6_i96_o96')
+      blocks_args.append('r1_k3_s11_e6_i96_o160_noskip')
   else:
     if output_stride == 16:
-      block_args.append('r4_k5_s11_e6_i96_o192')
-      block_args.append('r1_k3_s11_e6_i192_o320_noskip')
+      blocks_args.append('r4_k5_s11_e6_i96_o192')
+      blocks_args.append('r1_k3_s11_e6_i192_o320_noskip')
     else:
-      block_args.append('r4_k5_s22_e6_i96_o192')
-      block_args.append('r1_k3_s11_e6_i192_o320_noskip')
+      blocks_args.append('r4_k5_s22_e6_i96_o192')
+      blocks_args.append('r1_k3_s11_e6_i192_o320_noskip')
   
   
   decoder = MnasNetDecoder()
@@ -175,18 +175,18 @@ def mnasnet_a1(depth_multiplier=None, output_stride=32, squeeze=False):
   
   if squeeze:
     if output_stride == 16:
-      block_args.append('r3_k5_s11_e6_i112_o80_se0.25')
-      block_args.append('r1_k3_s11_e6_i80_o160')
+      blocks_args.append('r3_k5_s11_e6_i112_o80_se0.25')
+      blocks_args.append('r1_k3_s11_e6_i80_o160')
     else:
-      block_args.append('r3_k5_s22_e6_i112_o80_se0.25')
-      block_args.append('r1_k3_s11_e6_i80_o160')
+      blocks_args.append('r3_k5_s22_e6_i112_o80_se0.25')
+      blocks_args.append('r1_k3_s11_e6_i80_o160')
   else:
     if output_stride == 16:
-      block_args.append('r3_k5_s11_e6_i112_o160_se0.25')
-      block_args.append('r1_k3_s11_e6_i160_o320')
+      blocks_args.append('r3_k5_s11_e6_i112_o160_se0.25')
+      blocks_args.append('r1_k3_s11_e6_i160_o320')
     else:
-      block_args.append('r3_k5_s22_e6_i112_o160_se0.25')
-      block_args.append('r1_k3_s11_e6_i160_o320')
+      blocks_args.append('r3_k5_s22_e6_i112_o160_se0.25')
+      blocks_args.append('r1_k3_s11_e6_i160_o320')
   
   
   global_params = mnasnet_model.GlobalParams(
@@ -222,18 +222,18 @@ def mnasnet_small(depth_multiplier=None, output_stride=32, squeeze=False):
   
   if squeeze:
     if output_stride == 16:
-      block_args.append('r3_k5_s11_e6_i32_o44_se0.25')
-      block_args.append('r1_k3_s11_e6_i44_o72')
+      blocks_args.append('r3_k5_s11_e6_i32_o44_se0.25')
+      blocks_args.append('r1_k3_s11_e6_i44_o72')
     else:
-      block_args.append('r3_k5_s22_e6_i32_o44_se0.25')
-      block_args.append('r1_k3_s11_e6_i44_o72')
+      blocks_args.append('r3_k5_s22_e6_i32_o44_se0.25')
+      blocks_args.append('r1_k3_s11_e6_i44_o72')
   else:
     if output_stride == 16:
-      block_args.append('r3_k5_s11_e6_i32_o88_se0.25')
-      block_args.append('r1_k3_s11_e6_i88_o144')
+      blocks_args.append('r3_k5_s11_e6_i32_o88_se0.25')
+      blocks_args.append('r1_k3_s11_e6_i88_o144')
     else:
-      block_args.append('r3_k5_s22_e6_i32_o88_se0.25')
-      block_args.append('r1_k3_s11_e6_i88_o144')
+      blocks_args.append('r3_k5_s22_e6_i32_o88_se0.25')
+      blocks_args.append('r1_k3_s11_e6_i88_o144')
     
   global_params = mnasnet_model.GlobalParams(
       batch_norm_momentum=0.99,
