@@ -461,6 +461,7 @@ class MnasNetModel(tf.keras.Model):
       with tf.variable_scope('mnas_head'):
         outputs = tf.nn.relu(
             self._bn1(self._conv_head(outputs), training=training))
+        self.endpoints['layer_19'] = outputs
         outputs = self._avg_pooling(outputs)
         if self._dropout:
           outputs = self._dropout(outputs, training=training)
