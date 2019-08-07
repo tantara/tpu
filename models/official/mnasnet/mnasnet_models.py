@@ -111,7 +111,7 @@ class MnasNetDecoder(object):
     return block_strings
 
 
-def mnasnet_b1(depth_multiplier=None, output_stride=32, squeeze=False):
+def mnasnet_b1(depth_multiplier=None, output_stride=32, squeeze=False, more=False):
   """Creates a mnasnet-b1 model.
 
   Args:
@@ -123,23 +123,31 @@ def mnasnet_b1(depth_multiplier=None, output_stride=32, squeeze=False):
   """
   blocks_args = [
       'r1_k3_s11_e1_i32_o16_noskip', 'r3_k3_s22_e3_i16_o24',
-      'r3_k5_s22_e3_i24_o40', 'r3_k5_s22_e6_i40_o80', 'r2_k3_s11_e6_i80_o96',
+      'r3_k5_s22_e3_i24_o40', 'r3_k5_s22_e6_i40_o80',
   ]
   
   if squeeze:
-    if output_stride == 16:
-      blocks_args.append('r4_k5_s11_e6_i96_o96')
+    if more:
+      blocks_args.append('r2_k3_s11_e6_i80_o48')
+      if output_stride == 16:
+        blocks_args.append('r4_k5_s11_e6_i48_o96')
+      else:
+        blocks_args.append('r4_k5_s22_e6_i48_o96')
       blocks_args.append('r1_k3_s11_e6_i96_o160_noskip')
     else:
-      blocks_args.append('r4_k5_s22_e6_i96_o96')
+      blocks_args.append('r2_k3_s11_e6_i80_o96')
+      if output_stride == 16:
+        blocks_args.append('r4_k5_s11_e6_i96_o96')
+      else:
+        blocks_args.append('r4_k5_s22_e6_i96_o96')
       blocks_args.append('r1_k3_s11_e6_i96_o160_noskip')
   else:
+    blocks_args.append('r2_k3_s11_e6_i80_o96')
     if output_stride == 16:
       blocks_args.append('r4_k5_s11_e6_i96_o192')
-      blocks_args.append('r1_k3_s11_e6_i192_o320_noskip')
     else:
       blocks_args.append('r4_k5_s22_e6_i96_o192')
-      blocks_args.append('r1_k3_s11_e6_i192_o320_noskip')
+    blocks_args.append('r1_k3_s11_e6_i192_o320_noskip')
   
   
   decoder = MnasNetDecoder()
@@ -157,7 +165,7 @@ def mnasnet_b1(depth_multiplier=None, output_stride=32, squeeze=False):
   return decoder.decode(blocks_args), global_params
 
 
-def mnasnet_a1(depth_multiplier=None, output_stride=32, squeeze=False):
+def mnasnet_a1(depth_multiplier=None, output_stride=32, squeeze=False, more=False):
   """Creates a mnasnet-a1 model.
 
   Args:
@@ -170,23 +178,30 @@ def mnasnet_a1(depth_multiplier=None, output_stride=32, squeeze=False):
   blocks_args = [
       'r1_k3_s11_e1_i32_o16_noskip', 'r2_k3_s22_e6_i16_o24',
       'r3_k5_s22_e3_i24_o40_se0.25', 'r4_k3_s22_e6_i40_o80',
-      'r2_k3_s11_e6_i80_o112_se0.25',
   ]
   
   if squeeze:
-    if output_stride == 16:
-      blocks_args.append('r3_k5_s11_e6_i112_o80_se0.25')
+    if more:
+      blocks_args.append('r2_k3_s11_e6_i80_o56_se0.25')
+      if output_stride == 16:
+        blocks_args.append('r3_k5_s11_e6_i56_o80_se0.25')
+      else:
+        blocks_args.append('r3_k5_s22_e6_i56_o80_se0.25')
       blocks_args.append('r1_k3_s11_e6_i80_o160')
     else:
-      blocks_args.append('r3_k5_s22_e6_i112_o80_se0.25')
+      blocks_args.append('r2_k3_s11_e6_i80_o112_se0.25')
+      if output_stride == 16:
+        blocks_args.append('r3_k5_s11_e6_i112_o80_se0.25')
+      else:
+        blocks_args.append('r3_k5_s22_e6_i112_o80_se0.25')
       blocks_args.append('r1_k3_s11_e6_i80_o160')
   else:
+    blocks_args.append('r2_k3_s11_e6_i80_o112_se0.25')
     if output_stride == 16:
       blocks_args.append('r3_k5_s11_e6_i112_o160_se0.25')
-      blocks_args.append('r1_k3_s11_e6_i160_o320')
     else:
       blocks_args.append('r3_k5_s22_e6_i112_o160_se0.25')
-      blocks_args.append('r1_k3_s11_e6_i160_o320')
+    blocks_args.append('r1_k3_s11_e6_i160_o320')
   
   
   global_params = mnasnet_model.GlobalParams(
@@ -204,7 +219,7 @@ def mnasnet_a1(depth_multiplier=None, output_stride=32, squeeze=False):
   return decoder.decode(blocks_args), global_params
 
 
-def mnasnet_small(depth_multiplier=None, output_stride=32, squeeze=False):
+def mnasnet_small(depth_multiplier=None, output_stride=32, squeeze=False, more=False):
   """Creates a mnasnet-a1 model.
 
   Args:
@@ -217,23 +232,30 @@ def mnasnet_small(depth_multiplier=None, output_stride=32, squeeze=False):
   blocks_args = [
       'r1_k3_s11_e1_i16_o8', 'r1_k3_s22_e3_i8_o16',
       'r2_k3_s22_e6_i16_o16', 'r4_k5_s22_e6_i16_o32_se0.25',
-      'r3_k3_s11_e6_i32_o32_se0.25',
   ]
   
   if squeeze:
-    if output_stride == 16:
-      blocks_args.append('r3_k5_s11_e6_i32_o44_se0.25')
+    if more:
+      blocks_args.append('r3_k3_s11_e6_i32_o16_se0.25')
+      if output_stride == 16:
+        blocks_args.append('r3_k5_s11_e6_i16_o44_se0.25')
+      else:
+        blocks_args.append('r3_k5_s22_e6_i16_o44_se0.25')
       blocks_args.append('r1_k3_s11_e6_i44_o72')
     else:
-      blocks_args.append('r3_k5_s22_e6_i32_o44_se0.25')
+      blocks_args.append('r3_k3_s11_e6_i32_o32_se0.25')
+      if output_stride == 16:
+        blocks_args.append('r3_k5_s11_e6_i32_o44_se0.25')
+      else:
+        blocks_args.append('r3_k5_s22_e6_i32_o44_se0.25')
       blocks_args.append('r1_k3_s11_e6_i44_o72')
   else:
+    blocks_args.append('r3_k3_s11_e6_i32_o32_se0.25')
     if output_stride == 16:
       blocks_args.append('r3_k5_s11_e6_i32_o88_se0.25')
-      blocks_args.append('r1_k3_s11_e6_i88_o144')
     else:
       blocks_args.append('r3_k5_s22_e6_i32_o88_se0.25')
-      blocks_args.append('r1_k3_s11_e6_i88_o144')
+    blocks_args.append('r1_k3_s11_e6_i88_o144')
     
   global_params = mnasnet_model.GlobalParams(
       batch_norm_momentum=0.99,
@@ -313,14 +335,14 @@ def mnasnet_d1_320(depth_multiplier=None):
   return decoder.decode(blocks_args), global_params
 
 
-def get_model_params(model_name, override_params, output_stride=32, squeeze=False):
+def get_model_params(model_name, override_params, output_stride=32, squeeze=False, more=False):
   """Get the block args and global params for a given model."""
   if model_name == 'mnasnet-a1':
-    blocks_args, global_params = mnasnet_a1(output_stride=output_stride, squeeze=squeeze)
+    blocks_args, global_params = mnasnet_a1(output_stride=output_stride, squeeze=squeeze, more=more)
   elif model_name == 'mnasnet-b1':
-    blocks_args, global_params = mnasnet_b1(output_stride=output_stride, squeeze=squeeze)
+    blocks_args, global_params = mnasnet_b1(output_stride=output_stride, squeeze=squeeze, more=more)
   elif model_name == 'mnasnet-small':
-    blocks_args, global_params = mnasnet_small(output_stride=output_stride, squeeze=squeeze)
+    blocks_args, global_params = mnasnet_small(output_stride=output_stride, squeeze=squeeze, more=more)
   elif model_name == 'mnasnet-d1':
     blocks_args, global_params = mnasnet_d1()
   elif model_name == 'mnasnet-d1-320':
@@ -335,7 +357,7 @@ def get_model_params(model_name, override_params, output_stride=32, squeeze=Fals
   return blocks_args, global_params
 
 
-def build_mnasnet_model(images, model_name, training, override_params=None, output_stride=32, squeeze=False):
+def build_mnasnet_model(images, model_name, training, override_params=None, output_stride=32, squeeze=False, more=False):
   """A helper functiion to create a MnasNet model and return predicted logits.
 
   Args:
@@ -353,7 +375,8 @@ def build_mnasnet_model(images, model_name, training, override_params=None, outp
     When override_params has invalid fields, raises ValueError.
   """
   assert isinstance(images, tf.Tensor)
-  blocks_args, global_params = get_model_params(model_name, override_params, output_stride=output_stride, squeeze=squeeze)
+  blocks_args, global_params = get_model_params(model_name, override_params,
+                                                output_stride=output_stride, squeeze=squeeze, more=more)
   with tf.variable_scope(model_name):
     model = mnasnet_model.MnasNetModel(blocks_args, global_params)
     logits = model(images, training=training)
@@ -363,7 +386,7 @@ def build_mnasnet_model(images, model_name, training, override_params=None, outp
   return logits, model.endpoints
 
 
-def build_mnasnet_base(images, model_name, training, override_params=None, output_stride=32, squeeze=False):
+def build_mnasnet_base(images, model_name, training, override_params=None, output_stride=32, squeeze=False, more=False):
   """A helper functiion to create a MnasNet base model and return global_pool.
 
   Args:
@@ -381,7 +404,8 @@ def build_mnasnet_base(images, model_name, training, override_params=None, outpu
     When override_params has invalid fields, raises ValueError.
   """
   assert isinstance(images, tf.Tensor)
-  blocks_args, global_params = get_model_params(model_name, override_params, output_stride=output_stride, squeeze=squeeze)
+  blocks_args, global_params = get_model_params(model_name, override_params,
+                                                output_stride=output_stride, squeeze=squeeze, more=more)
 
   with tf.variable_scope(model_name):
     model = mnasnet_model.MnasNetModel(blocks_args, global_params)
